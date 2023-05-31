@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/member/update" method="post" id="memberUpdate">
+    <input type="text" name="Id" readonly th:value="${member.id}">
+    <input type="text" name="memberEmail" readonly th:value="${member.memberEmail}">
+    <input type="text" name="memberPassword" th:value="${member.memberPassword}">
+    <input type="text" name="memberName" th:value="${member.memberName}">
+    <input type="text" name="memberBirth" th:value="${member.memberBirth}">
+    <input type="text" name="memberMobile" th:value="${member.memberMobile}">
+    <input type="submit" value="회원수정" >
+</form>
+</body>
+</html>

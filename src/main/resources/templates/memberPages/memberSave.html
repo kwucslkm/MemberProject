@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+</head>
+<body>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
+<div id="memberSaveForm">
+    <form action="/save" method="post" id="memberSave">
+        <input type="text" name="memberEmail" id="saveEmail" onblur="emailDuplicationChk()" placeholder="이메일">
+        <h6 id="emailChk_Result"></h6>
+        <input type="text" name="memberPassword" placeholder="비밀번호">
+        <input type="text" name="memberName" placeholder="이름">
+        <input type="date" name="memberBirth" placeholder="생년월일">
+        <input type="text" name="memberMobile" placeholder="전화번호">
+        <input type="submit" value="가입">
+    </form>
+</div>
+<div th:replace="component/footer :: footer"></div>
+
+</body>
+<script>
+    const email = document.getElementById("saveEmail").value;
+    const emailChkResult = document.getElementById("emailChk_Result");
+    console.log(email);
+    console.log(emailChkResult);
+    const emailDuplicationChk = () => {
+        $.ajax({
+            type: "post",
+            url: "/member/emailChk",
+            data: {
+                "memberEmail": email
+            },
+            success: function () {
+                emailChkResult.innerHTML = "멋진 이메일 입니다.";
+                emailChkResult.style.color = "green";
+
+            },
+            error: function (err) {
+                if (err.status == "409") {
+                    emailChkResult.innerHTML = "중복 이메일 입니다.";
+                    emailChkResult.style.color = "red";
+                } else if (err.status == "404") {
+                    emailChkResult.innerHTML = "필수입력 입니다.";
+                    emailChkResult.style.color = "red";
+                }
+            }
+        })
+
+
+    }
+</script>
+</html>

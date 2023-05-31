@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="nav" id="nav">
+    <h1>nav 에요</h1>
+    <span id="test">  테스트 입니다.</span>
+    <h2 id="sessionEmail" th:text="${session.loginEmail}"></h2>
+    <script>
+        const sEmail = document.getElementById("sessionEmail");
+        const test = document.getElementById("test");
+
+        if (sEmail.innerText == 'admin'){
+            test.innerHTML = "관리자로 로그인하셨습니다."
+        }
+    </script>
+</div>
+</body>
+</html>
