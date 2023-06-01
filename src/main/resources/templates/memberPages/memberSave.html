@@ -2,34 +2,57 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-
+    <th:block th:replace="component/config :: config"></th:block>
 </head>
 <body>
 <div th:replace="component/header :: header"></div>
 <div th:replace="component/nav :: nav"></div>
-<div id="memberSaveForm">
-    <form action="/save" method="post" id="memberSave">
-        <input type="text" name="memberEmail" id="saveEmail" onblur="emailDuplicationChk()" placeholder="이메일">
-        <h6 id="emailChk_Result"></h6>
-        <input type="text" name="memberPassword" placeholder="비밀번호">
-        <input type="text" name="memberName" placeholder="이름">
-        <input type="date" name="memberBirth" placeholder="생년월일">
-        <input type="text" name="memberMobile" placeholder="전화번호">
-        <input type="submit" value="가입">
-    </form>
+<div id="section">
+    <div id="memberSaveForm">
+        <form action="/member/save" method="post" id="memberSave">
+            <input type="text" name="memberEmail" id="saveEmail" onblur="emailDuplicationChk()" placeholder="이메일">
+            <h6 id="emailChk_Result"></h6>
+            <input type="text" name="memberPassword" placeholder="비밀번호">
+            <input type="text" name="memberName" placeholder="이름">
+            <input type="date" name="memberBirth" placeholder="생년월일">
+            <input type="text" name="memberMobile" placeholder="전화번호">
+            <input type="button" value="가입" onclick="member_Save()">
+        </form>
+    </div>
 </div>
 <div th:replace="component/footer :: footer"></div>
 
 </body>
 <script>
-    const email = document.getElementById("saveEmail").value;
-    const emailChkResult = document.getElementById("emailChk_Result");
-    console.log(email);
-    console.log(emailChkResult);
+    const member_Save = () => {
+        const memberEmail = document.querySelector('input[name="memberEmail"]').value;
+        const memberPassword = document.querySelector('input[name="memberPassword"]').value;
+        const memberName = document.querySelector('input[Name="memberName"]').value;
+        const memberBirth = document.querySelector('input[name="memberBirth"]').value;
+        const memberMobile = document.querySelector('input[name="memberMobile"]').value;
+        //
+        axios({
+            method: "post",
+            url: "member/axios/save",
+            data: {
+                memberEmail: memberEmail,
+                memberPassword: memberPassword,
+                memberName: memberName,
+                memberBirth: memberBirth,
+                memberMobile: memberMobile
+            }
+        }).then(res => {
+            console.log(res);
+            location.href = "member/login";
+        }).catch(err => {
+            console.log("err", err);
+        })
+
+    }
     const emailDuplicationChk = () => {
+
+        const email = document.getElementById("saveEmail").value;
+        const emailChkResult = document.getElementById("emailChk_Result");
         $.ajax({
             type: "post",
             url: "/member/emailChk",
@@ -39,7 +62,6 @@
             success: function () {
                 emailChkResult.innerHTML = "멋진 이메일 입니다.";
                 emailChkResult.style.color = "green";
-
             },
             error: function (err) {
                 if (err.status == "409") {
@@ -51,8 +73,6 @@
                 }
             }
         })
-
-
     }
 </script>
 </html>

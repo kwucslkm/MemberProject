@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <th:block th:replace="component/config :: config"></th:block>
+
 </head>
 <body>
-<table>
+<div th:replace = "component/header :: header"></div>
+<div th:replace = "component/nav :: nav"></div>
+<div id="section">
+<table class="table table-striped" id="memberDetailPage">
     <tr>
         <th>회원번호</th>
         <td th:text="${member.id}"></td>
@@ -38,5 +41,8 @@
 
     </tr>
 </table>
+
+</div>
+<div th:replace="component/footer :: footer"></div>
 </body>
 </html>

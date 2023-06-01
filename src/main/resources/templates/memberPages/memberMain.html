@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <th:block th:replace="component/config :: config"></th:block>
 </head>
 <body>
 <div th:replace="component/header :: header"></div>
 <div th:replace="component/nav :: nav"></div>
-<div>
+<div id="section">
     <h2>환영합니다. 메인페이지</h2>
+
+    <p></p>
 </div>
 <div th:replace="component/footer :: footer"></div>
 

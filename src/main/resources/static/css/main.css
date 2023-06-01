@@ -1,0 +1,43 @@
+#header{
+    background-color: darkslategrey;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+#nav {
+    background-color: dimgray;
+    color: white;
+}
+#nav ul {
+    list-style-type: none;
+    overflow: hidden;
+}
+#nav ul li {
+    float: left;
+}
+#nav ul li a {
+    display: inline-block;
+    padding: 15px;
+    text-decoration: none;
+    color: white;
+}
+#section {
+    margin: auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#section #memberDetailPage, #memberDetailPage th, #memberDetailPage td{
+    border: solid black 1px;
+}
+/*#section a, #section h2{*/
+/*    margin: auto 0;*/
+/*    display: block;*/
+/*}*/
+
+#footer {
+    background-color: black;
+    text-align: center;
+    color: yellow;
+    padding: 20px;
+}

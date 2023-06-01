@@ -6,15 +6,40 @@
 </head>
 <body>
 <div th:fragment="nav" id="nav">
-    <h1>nav 에요</h1>
-    <span id="test">  테스트 입니다.</span>
-    <h2 id="sessionEmail" th:text="${session.loginEmail}"></h2>
-    <script>
-        const sEmail = document.getElementById("sessionEmail");
-        const test = document.getElementById("test");
+    <ul>
+        <li>
+            <a href="/">
+                <i class="bi bi-house"></i>
+            </a>
+        </li>
+        <li id="navMemberRegBtn">
+            <a href="/member/save">회원가입</a>
+        </li>
+        <li id="navMemberLogin">
+            <a href="/member/login">로그인</a>
+        </li>
+        <li>
+            <a href="/member/list">회원목록(관리자일때만보이게)</a>
+        </li>
+        <li class="login-name" id="login-area">
 
-        if (sEmail.innerText == 'admin'){
-            test.innerHTML = "관리자로 로그인하셨습니다."
+        </li>
+    </ul>
+    <script th:inline="javascript">
+        const loginArea = document.getElementById("login-area");
+        const loginEmail = [[${session.loginEmail}]];
+        const navMemberLoginL = document.getElementById("navMemberLogin");
+        const navMemberRegBtnL = document.getElementById("navMemberRegBtn");
+        console.log(loginEmail.length);
+
+        if (loginEmail.length != 0) {
+            loginArea.innerHTML = "<a href='/member/mypage/" + loginEmail+"' >" + loginEmail + "님 환영해요!</a>" +
+                "<a href='/member/logout'>logout</a>";
+            navMemberLoginL.innerHTML = "환영"
+            navMemberRegBtnL.innerHTML = ""
+
+        } else {
+            loginArea.innerHTML = "<a href='/login'>login</a>";
         }
     </script>
 </div>

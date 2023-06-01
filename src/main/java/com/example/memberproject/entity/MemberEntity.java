@@ -3,18 +3,20 @@ package com.example.memberproject.entity;
 import com.example.memberproject.dto.MemberDTO;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "member_table")
 public class MemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-    @Column(length = 50)
+    @Column(length = 50, unique = true)
     public String memberEmail;
     @Column(length = 30)
     public String memberPassword;

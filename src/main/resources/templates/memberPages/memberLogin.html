@@ -2,20 +2,44 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <th:block th:replace="component/config :: config"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
 <div th:replace="component/header :: header"></div>
 <div th:replace="component/nav :: nav"></div>
-<div id="memberSaveForm">
-    <form action="/login" method="post" id="memberLogin">
-        <input type="text" name="memberEmail" placeholder="이메일">
-        <input type="text" name="memberPassword" placeholder="비밀번호">
-        <input type="submit"  value="로그인">
-    </form>
+<div id="section">
+    <div id="memberSaveForm">
+        <form action="/member/login" method="post" id="memberLogin">
+            <input type="text" name="memberEmail" placeholder="이메일">
+            <input type="text" name="memberPassword" placeholder="비밀번호">
+            <input type="button" value="로그인" onclick="login()">
+<!--            <input type="submit" value="로그인">-->
+        </form>
+    </div>
 </div>
 <div th:replace="component/footer :: footer"></div>
 
 </body>
+<script>
+    const login = () => {
+        const email = document.querySelector('input[name="memberEmail"]').value;
+        const password = document.querySelector('input[name="memberPassword"]').value;
+        axios({
+            method: "post",
+            url: "/member/login/axios",
+            data: {
+                memberEmail: email,
+                memberPassword: password
+            }
+        }).then(res => {
+            console.log("res", res);
+            location.href="/member/main";
+        }).catch(err => {
+            console.log("err", err);
+        });
+
+    }
+</script>
 </html>

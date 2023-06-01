@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -15,9 +16,9 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public void save(MemberDTO memberDTO) {
+    public Long save(MemberDTO memberDTO) {
         MemberEntity memberEntity = MemberEntity.toSaveMemberEntity(memberDTO);
-        memberRepository.save(memberEntity);
+        return memberRepository.save(memberEntity).getId();
     }
 
     public List<MemberDTO> findAll() {
@@ -30,15 +31,19 @@ public class MemberService {
     }
 
     public MemberDTO findById(Long id) {
-        Optional<MemberEntity> memberEntityOptional = memberRepository.findById(id);
-        if (memberEntityOptional.isPresent()) {
-            System.out.println("있다.");
-            MemberEntity memberEntity = memberEntityOptional.get();
-            MemberDTO memberDTO = MemberDTO.ToDTO(memberEntity);
-            return memberDTO;
-        } else {
-            return null;
-        }
+        MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        return MemberDTO.ToDTO(memberEntity);
+//        MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+//        return MemberDTO.toDTO(memberEntity);
+//        Optional<MemberEntity> memberEntityOptional = memberRepository.findById(id);
+//        if (memberEntityOptional.isPresent()) {
+//            System.out.println("있다.");
+//            MemberEntity memberEntity = memberEntityOptional.get();
+//            MemberDTO memberDTO = MemberDTO.ToDTO(memberEntity);
+//            return memberDTO;
+//        } else {
+//            return null;
+//        }
     }
 
     public void delete(Long id) {
@@ -47,6 +52,7 @@ public class MemberService {
 
     public void update(MemberDTO memberDTO) {
         MemberEntity memberEntity = MemberEntity.toSaveMemberEntityId(memberDTO);
+        System.out.println("memberEntity = " + memberEntity);
         memberRepository.save(memberEntity);
     }
 
@@ -69,5 +75,16 @@ public class MemberService {
         }else{
             return null;
         }
+    }
+
+    public void loginAxios(MemberDTO memberDTO) {
+        // chaining method( 체이닝 메서드)
+        memberRepository.findByMemberEmailAndMemberPassword(memberDTO.getMemberEmail(),memberDTO.getMemberPassword())
+                        .orElseThrow(()-> new NoSuchElementException("이메일 또는 비밀번호가 틀립니다."));
+    }
+
+    public MemberDTO findByEmail(String loginEmail) {
+        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(loginEmail);
+        return MemberDTO.ToDTO(byMemberEmail.get());
     }
 }
