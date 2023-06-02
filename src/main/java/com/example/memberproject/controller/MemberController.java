@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -23,11 +22,10 @@ public class MemberController {
         return "memberPages/memberSave";
     }
 
-    @PostMapping("/axios/save")
+    @PostMapping("/save")
     public ResponseEntity save(@RequestBody MemberDTO memberDTO) {
         System.out.println("memberDTO = " + memberDTO);
         memberService.save(memberDTO);
-
         return new ResponseEntity(memberDTO,HttpStatus.OK);
     }
 //@PostMapping("/save")
@@ -44,7 +42,7 @@ public class MemberController {
     }
 
 
-    @GetMapping("/axios/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id) throws Exception {
         System.out.println("넘어온 아이디" + id);
         MemberDTO memberDTO = memberService.findById(id);
@@ -57,20 +55,27 @@ public class MemberController {
 //    }
 
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
         memberService.delete(id);
-        return "redirect:/member/list";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/update/{id}")//세션으로 findbyemail로 바꿔보기
-    public String updateForm(@PathVariable Long id, Model model) {
-        System.out.println("id = " + id);
+    @PutMapping("/{id}")//세션으로 findbyemail로 바꿔보기
+    public ResponseEntity updateForm(@PathVariable Long id, Model model) {
+        System.out.println("수정할라고id = " + id);
         MemberDTO memberDTO = memberService.findById(id);
-        model.addAttribute("member", memberDTO);
+//        model.addAttribute("member", memberDTO);
 
-        return "memberPages/memberUpdate";
+        return new ResponseEntity<>(memberDTO,HttpStatus.OK);
     }
+//public String updateForm(@PathVariable Long id, Model model) {
+//        System.out.println("id = " + id);
+//        MemberDTO memberDTO = memberService.findById(id);
+//        model.addAttribute("member", memberDTO);
+//
+//        return "memberPages/memberUpdate";
+//    }
 
     @PostMapping("/axios/update")
     public ResponseEntity memberUpdate(@RequestBody MemberDTO memberDTO) {

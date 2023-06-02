@@ -1,48 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="component/config :: config"></th:block>
 
 </head>
 <body>
-<div th:replace = "component/header :: header"></div>
-<div th:replace = "component/nav :: nav"></div>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
 <div id="section">
-<table class="table table-striped" id="memberDetailPage">
-    <tr>
-        <th>회원번호</th>
-        <td th:text="${member.id}"></td>
-    </tr>
-    <tr>
-        <th>이메일</th>
-        <td th:text="${member.memberEmail}"></td>
-    </tr>
-    <tr>
-        <th>비밀번호</th>
+    <table class="table table-striped" id="memberDetailPage">
+        <tr>
+            <th>회원번호</th>
+            <td th:text="${member.id}"></td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td th:text="${member.memberEmail}"></td>
+        </tr>
+        <tr>
+            <th>비밀번호</th>
 
-        <td th:text="${member.memberPassword}"></td>
-    </tr>
-    <tr>
-        <th>이름</th>
-        <td th:text="${member.memberName}"></td>
-    </tr>
-    <tr>
-        <th>생년월일</th>
-        <td th:text="${member.memberBirth}"></td>
-    </tr>
-    <tr>
-        <th>모바일</th>
-        <td th:text="${member.memberMobile}"></td>
-    </tr>
-    <tr>
-        <td>
-            <a th:href="@{|/member/update/${member.id}|}">수정</a>
-        </td>
+            <td th:text="${member.memberPassword}"></td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td th:text="${member.memberName}"></td>
+        </tr>
+        <tr>
+            <th>생년월일</th>
+            <td th:text="${member.memberBirth}"></td>
+        </tr>
+        <tr>
+            <th>모바일</th>
+            <td th:text="${member.memberMobile}"></td>
+        </tr>
+        <tr>
+            <td>
+                <button th:onclick="member_update([[${member.id}]])">수정</button>
+                <!--            <a th:href="@{|/member/update/${member.id}|}">수정</a>-->
+            </td>
 
-    </tr>
-</table>
-
+        </tr>
+    </table>
+    <div id="axiosUpdate-area"></div>
+    <br>
 </div>
 <div th:replace="component/footer :: footer"></div>
 </body>
+<script th:inline="javascript">
+    const member_update = (id) => {
+        const updateForm = document.querySelector("#axiosUpdate-area");
+        axios({
+            method: "put",
+            url: "/member/" + id
+        }).then(res => {
+            console.log("res.data", res.data);
+            let result = "<br>" + "<form action=\"/member/update\" method=\"post\" id=\"memberUpdate\">\n" +
+                "        <input type=\"text\" name=\"id\" readonly value=\"" + res.data.id + "\">\n" +
+                "        <input type=\"text\" name=\"memberEmail\" readonly value=\"" + res.data.memberEmail + "\">\n" +
+                "        <input type=\"text\" name=\"memberPassword\" placeholder=\"비밀번호를 입력하세요\">\n" +
+                "        <input type=\"text\" name=\"memberName\" value=\"" + res.data.memberName + "\">\n" +
+                "        <input type=\"text\" name=\"memberBirth\" value=\"" + res.data.memberBirth + "\">\n" +
+                "        <input type=\"text\" name=\"memberMobile\" value=\"" + res.data.memberMobile + "\">\n" +
+                "        <input type=\"button\" value=\"회원수정\" onclick=\"update_member()\">\n" +
+                "    </form>";
+            updateForm.innerHTML = result;
+        }).catch(err => {
+            alert("수정실패")
+        })
+    }
+    const update_member = () => {
+        const passDB = [[${member.memberPassword}]];
+        const memberId = document.querySelector('input[name="id"]').value;
+        const memberEmail = document.querySelector('input[name="memberEmail"]').value;
+        const memberPassword = document.querySelector('input[name="memberPassword"]').value;
+        const memberName = document.querySelector('input[name="memberName"]').value;
+        const memberBirth = document.querySelector('input[name="memberBirth"]').value;
+        const memberMobile = document.querySelector('input[name="memberMobile"]').value;
+        if (passDB == memberPassword) {
+            axios({
+                method: "post",
+                url: "/member/axios/update",
+                data: {
+                    id: memberId,
+                    memberEmail: memberEmail,
+                    memberPassword: memberPassword,
+                    memberName: memberName,
+                    memberBirth: memberBirth,
+                    memberMobile: memberMobile
+                }
+            }).then(res => {
+                console.log("res", res);
+                console.log(memberEmail);
+                location.href = "/member/mypage/" + res.data.memberEmail;
+            }).catch(err => {
+                console.log("err", err);
+            });
+        } else {
+            alert("비밀번호가 일치하지 않습니다.")
+        }
+    }
+
+</script>
 </html>

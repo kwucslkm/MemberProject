@@ -6,6 +6,7 @@ import com.example.memberproject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -90,6 +91,10 @@ public class MemberService {
 //    public MemberDTO findByEmail(String loginEmail) {
 //        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(loginEmail);
 //        return MemberDTO.ToDTO(byMemberEmail.get());
+//    }
+//    public MemberDTO findByEmailThrowException(String loginEmail) {
+//        MemberEntity memberEntity = memberRepository.findByMemberEmail(loginEmail).orElseThrow(() -> new NoSuchElementException());
+//        return MemberDTO.ToDTO(memberEntity);
 //    }
 //
 }

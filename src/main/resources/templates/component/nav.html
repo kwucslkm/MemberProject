@@ -19,7 +19,7 @@
             <a href="/member/login">로그인</a>
         </li>
         <li>
-            <a href="/member/list">회원목록(관리자일때만보이게)</a>
+            <a href="/member/list">회원목록(관리자)</a>
         </li>
         <li class="login-name" id="login-area">
 
@@ -33,9 +33,9 @@
         console.log(loginEmail.length);
 
         if (loginEmail.length != 0) {
-            loginArea.innerHTML = "<a href='/member/mypage/" + loginEmail+"' >" + loginEmail + "님 환영해요!</a>" +
+            loginArea.innerHTML = "<a href='/member/mypage/" + loginEmail+"' >" + loginEmail + "님 페이지!</a>" +
                 "<a href='/member/logout'>logout</a>";
-            navMemberLoginL.innerHTML = "환영"
+            navMemberLoginL.innerHTML = ""
             navMemberRegBtnL.innerHTML = ""
 
         } else {
