@@ -84,7 +84,12 @@ public class MemberService {
     }
 
     public MemberDTO findByEmail(String loginEmail) {
-        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(loginEmail);
-        return MemberDTO.ToDTO(byMemberEmail.get());
+        MemberEntity memberEntity = memberRepository.findByMemberEmail(loginEmail).orElseThrow(()->new NoSuchElementException());
+        return MemberDTO.ToDTO(memberEntity);
     }
+//    public MemberDTO findByEmail(String loginEmail) {
+//        Optional<MemberEntity> byMemberEmail = memberRepository.findByMemberEmail(loginEmail);
+//        return MemberDTO.ToDTO(byMemberEmail.get());
+//    }
+//
 }

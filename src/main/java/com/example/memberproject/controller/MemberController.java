@@ -23,11 +23,18 @@ public class MemberController {
         return "memberPages/memberSave";
     }
 
-    @PostMapping("/save")
-    public String save(@ModelAttribute MemberDTO memberDTO) {
+    @PostMapping("/axios/save")
+    public ResponseEntity save(@RequestBody MemberDTO memberDTO) {
+        System.out.println("memberDTO = " + memberDTO);
         memberService.save(memberDTO);
-        return "index";
+
+        return new ResponseEntity(memberDTO,HttpStatus.OK);
     }
+//@PostMapping("/save")
+//    public String save(@ModelAttribute MemberDTO memberDTO) {
+//        memberService.save(memberDTO);
+//        return "index";
+//    }
 
     @GetMapping("/list")
     public String findAll(Model model) {
@@ -56,18 +63,18 @@ public class MemberController {
         return "redirect:/member/list";
     }
 
-    @GetMapping("/update/{id}")
+    @GetMapping("/update/{id}")//세션으로 findbyemail로 바꿔보기
     public String updateForm(@PathVariable Long id, Model model) {
         System.out.println("id = " + id);
         MemberDTO memberDTO = memberService.findById(id);
         model.addAttribute("member", memberDTO);
 
-        return "memberPages/updateForm";
+        return "memberPages/memberUpdate";
     }
 
     @PostMapping("/axios/update")
     public ResponseEntity memberUpdate(@RequestBody MemberDTO memberDTO) {
-        System.out.println("memberDTO = " + memberDTO);
+//        System.out.println("memberDTO = " + memberDTO);
         memberService.update(memberDTO);
 //        return "redirect:/member/list";
         return new ResponseEntity<>(memberDTO,HttpStatus.OK);
@@ -107,18 +114,22 @@ public class MemberController {
 
 
     @PostMapping("/emailChk")
-    public ResponseEntity loginChk(@RequestParam("memberEmail") String memberEmail, Model model) {
-
-        System.out.println("memberEmail = " + memberEmail);
-        MemberDTO memberDTO = memberService.memberEmailChk(memberEmail);
-        if (memberEmail.length() == 0) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (memberDTO == null) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+    public ResponseEntity loginChk(@RequestBody MemberDTO memberDTO){
+        memberService.findByEmail(memberDTO.getMemberEmail());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+//    public ResponseEntity loginChk(@RequestParam("memberEmail") String memberEmail, Model model) {
+//
+//        System.out.println("memberEmail = " + memberEmail);
+//        MemberDTO memberDTO = memberService.memberEmailChk(memberEmail);
+//        if (memberEmail.length() == 0) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        } else if (memberDTO == null) {
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.CONFLICT);
+//        }
+//    }
 
     @GetMapping("/main")
     public String main() {

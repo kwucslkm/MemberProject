@@ -11,7 +11,17 @@
     <div id="memberSaveForm">
         <form action="/member/save" method="post" id="memberSave">
             <input type="text" name="memberEmail" id="saveEmail" onblur="emailDuplicationChk()" placeholder="이메일">
-            <h6 id="emailChk_Result"></h6>
+            <!--            <h6 id="emailChk_Result"></h6>-->
+            <div id="emailChk_Result">
+                <span id="yes" style="font-size: 10px; color: green; display: none;">
+                    사용가능한 이메일입니다.
+                </span>
+                <span id="no" style="font-size: 10px; color: red; display: none;">
+                    이미 있는 이메일입니다.
+                </span>
+
+            </div>
+
             <input type="text" name="memberPassword" placeholder="비밀번호">
             <input type="text" name="memberName" placeholder="이름">
             <input type="date" name="memberBirth" placeholder="생년월일">
@@ -33,7 +43,7 @@
         //
         axios({
             method: "post",
-            url: "member/axios/save",
+            url: "/member/axios/save",
             data: {
                 memberEmail: memberEmail,
                 memberPassword: memberPassword,
@@ -43,36 +53,53 @@
             }
         }).then(res => {
             console.log(res);
-            location.href = "member/login";
+            location.href = "/member/login";
         }).catch(err => {
             console.log("err", err);
         })
 
     }
     const emailDuplicationChk = () => {
-
+        document.querySelector("#yes").style.display = "none";
+        document.querySelector("#no").style.display = "none";
         const email = document.getElementById("saveEmail").value;
-        const emailChkResult = document.getElementById("emailChk_Result");
-        $.ajax({
-            type: "post",
+
+        // const emailChkResult = document.getElementById("emailChk_Result");
+        axios({
+            method: "post",
             url: "/member/emailChk",
             data: {
-                "memberEmail": email
-            },
-            success: function () {
-                emailChkResult.innerHTML = "멋진 이메일 입니다.";
-                emailChkResult.style.color = "green";
-            },
-            error: function (err) {
-                if (err.status == "409") {
-                    emailChkResult.innerHTML = "중복 이메일 입니다.";
-                    emailChkResult.style.color = "red";
-                } else if (err.status == "404") {
-                    emailChkResult.innerHTML = "필수입력 입니다.";
-                    emailChkResult.style.color = "red";
-                }
+                memberEmail: email
             }
+        }).then(res => {
+            console.log(res);
+            document.querySelector("#no").style.display = "block";
+        }).catch(err => {
+            console.log(err);
+            document.querySelector("#yes").style.display = "block";
+
         })
+        //
+        // $.ajax({
+        //     type: "post",
+        //     url: "/member/emailChk",
+        //     data: {
+        //         "memberEmail": email
+        //     },
+        //     success: function () {
+        //         emailChkResult.innerHTML = "멋진 이메일 입니다.";
+        //         emailChkResult.style.color = "green";
+        //     },
+        //     error: function (err) {
+        //         if (err.status == "409") {
+        //             emailChkResult.innerHTML = "중복 이메일 입니다.";
+        //             emailChkResult.style.color = "red";
+        //         } else if (err.status == "404") {
+        //             emailChkResult.innerHTML = "필수입력 입니다.";
+        //             emailChkResult.style.color = "red";
+        //         }
+        //     }
+        // })
     }
 </script>
 </html>

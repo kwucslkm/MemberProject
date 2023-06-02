@@ -51,7 +51,7 @@ public class MemberTest {
     //회원가입테스트
     @Test
     @Transactional
-    @Rollback
+    @Rollback(value = true) //default
     @DisplayName("회원가입 테스트")
     public void memberSaveTest() {
         MemberDTO memberDTO = newMember(999);
