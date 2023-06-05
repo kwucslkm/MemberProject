@@ -90,22 +90,31 @@ public class MemberController {
 //        return "redirect:/member/list";
 //    }
     @GetMapping("/login")
-    public String loginForm() {
+//    public String loginForm() {
+//        return "memberPages/memberLogin";
+//    }
+    public String loginForm(@RequestParam(value = "redirectURI",defaultValue = "/member/mypage") String redirectURI
+            ,Model model) {
+        model.addAttribute("redirectURI",redirectURI);
         return "memberPages/memberLogin";
     }
 
     @PostMapping("/login")
     public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session,
-                        Model model) {
+                        @RequestParam("redirectURI") String redirectURI,Model model) {
         int loginResult = memberService.loginChk(memberDTO);
         if (loginResult == 1) {
             System.out.println("로그인성공");
             session.setAttribute("loginEmail", memberDTO.getMemberEmail());
             model.addAttribute("loginResult", loginResult);
-            return "memberPages/memberMain";
+//            return "memberPages/memberMain";
+            // 로그인 성공하면 사용자가 직전에 요청한 주소로 redirect
+            // 인터셉터에 걸리지 않고 처음부터 로그인하는 사용자였다면
+            // redirect:/member/mypage 로 요청되며, memberMain 화면으로 전환됨.
+            return "redirect:" + redirectURI;
         } else {
             System.out.println("로그인실패");
-            return "index";
+            return "memberPages/memberLogin";
         }
 
     }
